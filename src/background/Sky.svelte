@@ -3,6 +3,8 @@
   import { onMount } from "svelte";
   import { nextInt as nextNumber } from "../randomizer/Randomizer";
 
+  const CLOUDS_AMOUNT = 30;
+
   let skyWidth: number;
   let skyHeight: number;
   let clouds = [];
@@ -11,6 +13,7 @@
     x: number;
     y: number;
     size: number;
+    speed: number;
   }
 
   function generateCloud(y?: number): Cloud {
@@ -18,6 +21,7 @@
       y: y || nextNumber(0, skyWidth),
       x: nextNumber(0, skyHeight),
       size: nextNumber(20, 150),
+      speed: nextNumber(80, 120),
     };
   }
 
@@ -34,7 +38,7 @@
   }
 
   onMount(() => {
-    clouds = generateClouds(20);
+    clouds = generateClouds(CLOUDS_AMOUNT);
   });
 </script>
 

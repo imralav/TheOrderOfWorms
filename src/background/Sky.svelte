@@ -19,7 +19,7 @@
   function generateCloud(y?: number): Cloud {
     return {
       y: y || nextNumber(0, skyWidth),
-      x: nextNumber(0, skyHeight),
+      x: nextNumber(0, window.innerHeight),
       size: nextNumber(20, 150),
       speed: nextNumber(80, 120),
     };
@@ -57,6 +57,6 @@
   main {
     position: relative;
     width: 100vw;
-    height: 100vh;
+    height: 70vh;
   }
 </style>

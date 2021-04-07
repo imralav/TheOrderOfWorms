@@ -61,5 +61,6 @@
     position: absolute;
     background-color: #fff;
     border-radius: 15px;
+    z-index: -1;
   }
 </style>

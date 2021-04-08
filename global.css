@@ -1,4 +1,11 @@
 body {
   margin: 0;
   padding: 0;
+  font-family: "New Tegomin", serif;
+}
+
+button,
+select,
+option {
+  font-family: "New Tegomin", serif;
 }

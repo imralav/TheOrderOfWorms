@@ -33,5 +33,7 @@
     width: 95%;
     margin: 0 auto;
     background-color: rgb(102, 55, 17);
+    padding: 15px;
+    box-sizing: border-box;
   }
 </style>

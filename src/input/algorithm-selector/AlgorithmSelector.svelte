@@ -1,21 +1,22 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
+  import type { SortingAlgorithmOption } from "../../sorting-algorithms/sorting-algorithms";
 
   const dispatcher = createEventDispatcher();
-  export let algorithms: string[];
-  let selectedAlgorithm: string;
+  export let algorithms: SortingAlgorithmOption[];
+  let selectedAlgorithm: SortingAlgorithmOption;
 </script>
 
 <main>
   <p>Select sorting method:</p>
   <select bind:value={selectedAlgorithm}>
     {#each algorithms as algorithm}
-      <option value={algorithm}>{algorithm}</option>
+      <option value={algorithm}>{algorithm.name}</option>
     {/each}
   </select>
-  <button on:click={() => dispatcher("sorting", selectedAlgorithm)}
-    >Sort worms with {selectedAlgorithm}</button
-  >
+  <button on:click={() => dispatcher("sorting", selectedAlgorithm)}>
+    Sort worms with {selectedAlgorithm?.name}
+  </button>
 </main>
 
 <style>

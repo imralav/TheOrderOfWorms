@@ -3,11 +3,14 @@
   import Sky from "./background/Sky.svelte";
   import Ground from "./ground/Ground.svelte";
   import AlgorithmSelector from "./input/algorithm-selector/AlgorithmSelector.svelte";
+  import { availableAlgorithms } from "./sorting-algorithms/sorting-algorithms";
+  import type { SortingAlgorithmOption } from "./sorting-algorithms/sorting-algorithms";
 
-  const algorithms = ["bubble sort", "merge sort", "quick sort"];
+  const algorithms = availableAlgorithms;
 
-  function sortWithAlgorithm(algorithm: string) {
-    console.log("Sorting with", algorithm);
+  function sortWithAlgorithm(algorithm: SortingAlgorithmOption) {
+    console.log("Sorting with", algorithm.name);
+    console.log(algorithm.sort([1, 2, 3, 4, 5, 6, 9, 0]));
   }
 </script>
 

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "rollup -c",
-    "dev": "rollup -c -w",
+    "dev": "rm -rf ./public/build && rollup -c -w",
     "start": "sirv public --no-clear --host 0.0.0.0",
     "validate": "svelte-check",
     "publish": "npm run build && gh-pages -d public",

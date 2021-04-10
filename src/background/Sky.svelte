@@ -1,7 +1,7 @@
 <script lang="ts">
   import Cloud from "./Cloud.svelte";
   import { onMount } from "svelte";
-  import { nextInt as nextNumber } from "../randomizer/Randomizer";
+  import { nextNumber } from "../randomizer/Randomizer";
 
   const CLOUDS_AMOUNT = 30;
 

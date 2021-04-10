@@ -24,8 +24,6 @@
       .subscribe(() => {
         y -= speed;
         if (y < -2 * size) {
-          //stop the animation and register a new one
-          console.log("Cloud out of bound", y, size);
           dispatcher("cloud-left-the-sky");
           y = skyWidth;
           destroy.next();

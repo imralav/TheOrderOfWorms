@@ -5,6 +5,7 @@
   import AlgorithmSelector from "./input/algorithm-selector/AlgorithmSelector.svelte";
   import { availableAlgorithms } from "./sorting-algorithms/sorting-algorithms";
   import type { SortingAlgorithmOption } from "./sorting-algorithms/sorting-algorithms";
+  import NumbersCollector from "./input/numbers-collector/NumbersCollector.svelte";
 
   const algorithms = availableAlgorithms;
 
@@ -16,7 +17,13 @@
 
 <Sky />
 <Ground>
+  <NumbersCollector
+    slot="grass"
+    on:values-changed={(newValues) =>
+      console.log("New values: ", newValues.detail)}
+  />
   <AlgorithmSelector
+    slot="earth"
     {algorithms}
     on:sorting={(event) => sortWithAlgorithm(event.detail)}
   />

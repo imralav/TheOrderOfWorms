@@ -2,9 +2,11 @@
 </script>
 
 <main>
-  <section class="grass" />
+  <section class="grass">
+    <slot name="grass">Values to sort</slot>
+  </section>
   <section class="earth">
-    <slot>Algorithm input</slot>
+    <slot name="earth">Algorithm selection</slot>
   </section>
 </main>
 >
@@ -24,16 +26,16 @@
   .grass {
     border-radius: 15px;
     background-color: rgb(44, 102, 17);
-    height: 25%;
     width: 100%;
+    padding: 10px;
   }
 
   .earth {
-    height: 75%;
     width: 95%;
     margin: 0 auto;
     background-color: rgb(102, 55, 17);
     padding: 15px;
+    padding-bottom: 100px;
     box-sizing: border-box;
   }
 </style>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import Cloud from "./Cloud.svelte";
   import { onMount } from "svelte";
-  import { nextNumber } from "../randomizer/Randomizer";
+  import { nextNumber, nextInt } from "../randomizer/Randomizer";
 
   const CLOUDS_AMOUNT = 30;
 
@@ -14,14 +14,16 @@
     y: number;
     size: number;
     speed: number;
+    opacity: number;
   }
 
   function generateCloud(y?: number): Cloud {
     return {
-      y: y || nextNumber(0, skyWidth),
-      x: nextNumber(0, window.innerHeight),
-      size: nextNumber(20, 150),
-      speed: nextNumber(80, 120),
+      y: y || nextInt(0, skyWidth),
+      x: nextInt(0, window.innerHeight),
+      size: nextInt(20, 150),
+      speed: nextInt(80, 120),
+      opacity: Math.sqrt(nextNumber(0.25, 1)),
     };
   }
 

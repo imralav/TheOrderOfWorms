@@ -6,8 +6,9 @@
   export let x: number,
     y: number,
     size: number,
-    speed: number,
-    skyWidth: number;
+    speed: number = 100,
+    skyWidth: number,
+    opacity: number = 1;
   export const CLOUD_MOVEMENT_TICK_INTERVAL = 4000;
   let animatedY;
   let unsubscribeAnimation;
@@ -50,7 +51,7 @@
 
 <div
   style="top: {x}px; left: {$animatedY}px; width: {size}px; height: {size /
-    2}px"
+    2}px; opacity: {opacity}"
 />
 
 <style>

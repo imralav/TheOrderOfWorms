@@ -1,6 +1,11 @@
 :root {
   --grass-color: rgb(44, 102, 17);
+  --grass-lighter-color: rgb(82, 158, 46);
   --grass-darker-color: rgb(29, 71, 9);
+  --earth-color: rgb(102, 55, 17);
+  --earth-lighter-color: rgb(187, 136, 95);
+  --earth-darker-color: rgb(83, 47, 17);
+  --earth-darkest-color: rgb(54, 29, 8);
 }
 
 body {

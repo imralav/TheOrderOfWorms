@@ -31,9 +31,10 @@
   }
 
   .earth {
+    box-shadow: inset 0 10px 5px -5px var(--earth-darker-color);
     width: 95%;
     margin: 0 auto;
-    background-color: rgb(102, 55, 17);
+    background-color: var(--earth-color);
     padding: 15px;
     padding-bottom: 100px;
     box-sizing: border-box;

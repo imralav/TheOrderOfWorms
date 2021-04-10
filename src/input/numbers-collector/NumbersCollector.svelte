@@ -42,7 +42,7 @@
 
 <main>
   {#each values as value}
-    <input type="number" bind:value max={MAX_VALUE} min={MIN_VALUE} />
+    <input bind:value readonly disabled size="4" />
   {/each}
   <button on:click={() => addValue()}>+</button>
   <button on:click={() => removeValue()}>-</button>
@@ -59,26 +59,31 @@
     gap: 25px;
   }
 
+  main > *:focus {
+    outline: var(--grass-lighter-color) solid 1px;
+  }
+
   button {
     display: inline-block;
     text-align: center;
-    color: var(--grass-color);
+    color: var(--grass-lighter-color);
     background-color: var(--grass-darker-color);
     font-size: 25px;
     font-weight: bolder;
     border: 0;
     padding: 0 10px;
+    border-radius: 5px;
   }
 
   input {
     display: inline-block;
     text-align: center;
-    color: var(--grass-color);
+    color: var(--grass-lighter-color);
     background-color: var(--grass-darker-color);
     font-size: 25px;
     font-weight: bolder;
     padding: 5px;
     border: 0;
-    border-radius: 20%;
+    border-radius: 5px;
   }
 </style>

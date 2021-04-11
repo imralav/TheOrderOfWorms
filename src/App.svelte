@@ -6,21 +6,53 @@
   import { availableAlgorithms } from "./sorting-algorithms/sorting-algorithms";
   import type { SortingAlgorithmOption } from "./sorting-algorithms/sorting-algorithms";
   import NumbersCollector from "./input/numbers-collector/NumbersCollector.svelte";
+  import { nextInts, nextInt } from "./randomizer/Randomizer";
+  import Worms from "./ground/Worms.svelte";
+
+  const MIN_VALUE = 0;
+  const MAX_VALUE = 300;
+  const MIN_LENGTH = 1;
+  const MAX_LENGTH = 10;
+  const INITIAL_LENGTH = 3;
 
   const algorithms = availableAlgorithms;
+  let values = nextInts(MIN_VALUE, MAX_VALUE, INITIAL_LENGTH);
 
   function sortWithAlgorithm(algorithm: SortingAlgorithmOption) {
-    console.log("Sorting with", algorithm.name);
-    console.log(algorithm.sort([1, 2, 3, 4, 5, 6, 9, 0]));
+    const sortedValues = algorithm.sort(values);
+    console.log(sortedValues.result);
+    values = sortedValues.result;
+    //apply events to inputs in NumbersCollector and to worms
+  }
+
+  function randomizeAll() {
+    values = nextInts(MIN_VALUE, MAX_VALUE, values.length);
+  }
+
+  function addValue() {
+    const newAmount = values.length + 1;
+    if (newAmount <= MAX_LENGTH) {
+      values = [...values, nextInt(MIN_VALUE, MAX_VALUE)];
+    }
+  }
+
+  function removeValue() {
+    const newAmount = values.length - 1;
+    if (newAmount >= MIN_LENGTH) {
+      values = values.slice(0, newAmount);
+    }
   }
 </script>
 
 <Sky />
 <Ground>
+  <Worms slot="above-ground" {values} />
   <NumbersCollector
     slot="grass"
-    on:values-changed={(newValues) =>
-      console.log("New values: ", newValues.detail)}
+    {values}
+    on:value-added={() => addValue()}
+    on:value-removed={() => removeValue()}
+    on:values-randomized={() => randomizeAll()}
   />
   <AlgorithmSelector
     slot="earth"

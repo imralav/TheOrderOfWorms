@@ -5,19 +5,22 @@
 </script>
 
 <main>
-  <section class="grass-leaves">
-    {#each Array(GRASS_SECTIONS_AMOUNT) as _}
-      <div
-        class="grass-leaf"
-        style="width: {100 /
-          (GRASS_SECTIONS_AMOUNT + 5)}%; animation-delay: {nextNumber(
-          0,
-          3
-        )}s; animation-duration: {nextNumber(0.8, 1.5)}s"
-      />
-    {/each}
+  <section class="above-ground">
+    <slot name="above-ground">above ground</slot>
   </section>
   <section class="grass">
+    <section class="grass-leaves">
+      {#each Array(GRASS_SECTIONS_AMOUNT) as _}
+        <div
+          class="grass-leaf"
+          style="width: {100 /
+            (GRASS_SECTIONS_AMOUNT + 5)}%; animation-delay: {nextNumber(
+            0,
+            3
+          )}s; animation-duration: {nextNumber(0.8, 1.5)}s"
+        />
+      {/each}
+    </section>
     <slot name="grass">Values to sort</slot>
   </section>
   <section class="earth">
@@ -41,6 +44,13 @@
     z-index: 1;
   }
 
+  .above-ground {
+    z-index: -3;
+    width: 100%;
+    height: 70vh;
+    padding: 0 10px;
+  }
+
   .grass {
     border-radius: 15px;
     background-color: var(--grass-color);
@@ -50,7 +60,7 @@
 
   .grass-leaves {
     z-index: -1;
-    top: -10px;
+    top: 68.7vh;
     position: absolute;
     width: 100%;
     padding: 10px;

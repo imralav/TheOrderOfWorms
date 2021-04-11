@@ -1,54 +1,26 @@
 <script lang="ts">
-  import { nextInt, nextInts } from "../../randomizer/Randomizer";
-  import { createEventDispatcher, onMount } from "svelte";
-  const MIN_VALUE = 0;
-  const MAX_VALUE = 300;
-  const MIN_LENGTH = 1;
-  const MAX_LENGTH = 10;
-  const INITIAL_LENGTH = 3;
-  let valuesChangedDispatcher = createEventDispatcher();
-  let values: number[] = [];
+  import { createEventDispatcher } from "svelte";
+  import { scale } from "svelte/transition";
+  export let values: number[];
 
-  onMount(() => {
-    values = nextInts(MIN_VALUE, MAX_VALUE, INITIAL_LENGTH);
-    dispatchValuesChangedEvent();
-  });
-
-  function dispatchValuesChangedEvent() {
-    valuesChangedDispatcher("values-changed", values);
-  }
-
-  function randomizeAll() {
-    values = nextInts(MIN_VALUE, MAX_VALUE, values.length);
-    dispatchValuesChangedEvent();
-  }
-
-  function addValue() {
-    const newAmount = values.length + 1;
-    if (newAmount <= MAX_LENGTH) {
-      values = [...values, nextInt(MIN_VALUE, MAX_VALUE)];
-    }
-    dispatchValuesChangedEvent();
-  }
-
-  function removeValue() {
-    const newAmount = values.length - 1;
-    if (newAmount >= MIN_LENGTH) {
-      values = values.slice(0, newAmount);
-    }
-    dispatchValuesChangedEvent();
-  }
+  let numbersCollectorEvents = createEventDispatcher();
 </script>
 
 <main>
   {#each values as value}
-    <input bind:value readonly disabled size="4" />
+    <input
+      bind:value
+      readonly
+      disabled
+      size="4"
+      transition:scale={{ duration: 250 }}
+    />
   {/each}
-  <button on:click={() => addValue()}>+</button>
-  <button on:click={() => removeValue()}>-</button>
-  <button on:click={() => randomizeAll()}
-    ><img src="/icons/refresh.svg" alt="Randomize values" /></button
-  >
+  <button on:click={() => numbersCollectorEvents("value-added")}>+</button>
+  <button on:click={() => numbersCollectorEvents("value-removed")}>-</button>
+  <button on:click={() => numbersCollectorEvents("values-randomized")}>
+    <img src="/icons/refresh.svg" alt="Randomize values" />
+  </button>
 </main>
 
 <style>

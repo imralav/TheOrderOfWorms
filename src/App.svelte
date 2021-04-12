@@ -7,7 +7,7 @@
   import type { SortingAlgorithmOption } from "./sorting-algorithms/sorting-algorithms";
   import NumbersCollector from "./input/numbers-collector/NumbersCollector.svelte";
   import { nextInts, nextInt } from "./randomizer/Randomizer";
-  import Worms from "./ground/Worms.svelte";
+  import Worms from "./worms/Worms.svelte";
 
   const MIN_VALUE = 0;
   const MAX_VALUE = 300;
@@ -46,7 +46,7 @@
 
 <Sky />
 <Ground>
-  <Worms slot="above-ground" {values} />
+  <Worms slot="above-ground" wormHeights={values} />
   <NumbersCollector
     slot="grass"
     {values}

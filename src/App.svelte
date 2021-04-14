@@ -44,19 +44,20 @@
   }
 </script>
 
-<Sky />
-<Ground>
-  <Worms slot="above-ground" wormHeights={values} />
-  <NumbersCollector
-    slot="grass"
-    {values}
-    on:value-added={() => addValue()}
-    on:value-removed={() => removeValue()}
-    on:values-randomized={() => randomizeAll()}
-  />
-  <AlgorithmSelector
-    slot="earth"
-    {algorithms}
-    on:sorting={(event) => sortWithAlgorithm(event.detail)}
-  />
-</Ground>
+<Sky>
+  <Ground>
+    <Worms slot="above-ground" wormHeights={values} />
+    <NumbersCollector
+      slot="grass"
+      {values}
+      on:value-added={() => addValue()}
+      on:value-removed={() => removeValue()}
+      on:values-randomized={() => randomizeAll()}
+    />
+    <AlgorithmSelector
+      slot="earth"
+      {algorithms}
+      on:sorting={(event) => sortWithAlgorithm(event.detail)}
+    />
+  </Ground>
+</Sky>

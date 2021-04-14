@@ -3,6 +3,7 @@
   export let wormHeights: number[];
 
   let maxHeight; //compute worm height according to max container height
+  //how to make the worms move without jumping around after changing their amount?
 </script>
 
 <main bind:clientHeight={maxHeight}>
@@ -13,7 +14,6 @@
 
 <style>
   main {
-    z-index: -3;
     display: flex;
     justify-content: space-evenly;
     align-items: flex-end;

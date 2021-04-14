@@ -31,27 +31,23 @@
 
 <style>
   main {
-    position: fixed;
-    bottom: 0;
-    left: 10vw;
-    height: auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
     margin: 0 auto;
     width: 80vw;
-    z-index: 1;
-  }
-
-  main > * {
-    z-index: 1;
   }
 
   .above-ground {
-    z-index: -3;
     width: 100%;
-    height: 70vh;
+    height: 100%;
     padding: 0 10px;
   }
 
   .grass {
+    position: relative;
     border-radius: 15px;
     background-color: var(--grass-color);
     width: 100%;
@@ -60,10 +56,9 @@
 
   .grass-leaves {
     z-index: -1;
-    top: 68.7vh;
+    top: 0;
     position: absolute;
-    width: 100%;
-    padding: 10px;
+    width: calc(100% - 20px);
     display: flex;
     justify-content: space-evenly;
     background-color: rgb(0, 0, 0, 0);

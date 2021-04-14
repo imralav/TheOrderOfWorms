@@ -20,7 +20,7 @@
   function generateCloud(y?: number): Cloud {
     return {
       y: y || nextInt(0, skyWidth),
-      x: nextInt(0, window.innerHeight),
+      x: nextInt(0, skyHeight),
       size: nextInt(20, 150),
       speed: nextInt(80, 120),
       opacity: Math.sqrt(nextNumber(0.25, 1)),
@@ -33,22 +33,18 @@
       .map(() => generateCloud());
   }
 
-  function replaceCloud(id: number) {
-    console.log("Replacing cloud", id);
-    clouds.splice(id, 1);
-    clouds = [...clouds, generateCloud()];
-  }
-
   onMount(() => {
     clouds = generateClouds(CLOUDS_AMOUNT);
   });
 </script>
 
 <main bind:clientWidth={skyWidth} bind:clientHeight={skyHeight}>
-  {#each clouds as cloud, index}
-    <!-- <Cloud {...cloud} on:cloud-left-the-sky={() => replaceCloud(index)} /> -->
-    <Cloud {...cloud} {skyWidth} />
-  {/each}
+  <section class="clouds">
+    {#each clouds as cloud}
+      <Cloud {...cloud} {skyWidth} />
+    {/each}
+  </section>
+  <slot />
 </main>
 
 <style>
@@ -56,9 +52,10 @@
     background-color: rgb(87, 191, 240);
     overflow: hidden;
   }
-  main {
-    position: relative;
+  section.clouds {
     width: 100vw;
-    height: 70vh;
+    height: 100vh;
+    display: inline;
+    position: relative;
   }
 </style>

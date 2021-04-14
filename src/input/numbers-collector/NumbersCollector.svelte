@@ -4,6 +4,7 @@
   export let values: number[];
 
   let numbersCollectorEvents = createEventDispatcher();
+  //the buttons shouldnt move after adding/removing worms
 </script>
 
 <main>

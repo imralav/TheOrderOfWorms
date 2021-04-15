@@ -4,10 +4,14 @@
   import Ground from "./ground/Ground.svelte";
   import AlgorithmSelector from "./input/algorithm-selector/AlgorithmSelector.svelte";
   import { availableAlgorithms } from "./sorting-algorithms/sorting-algorithms";
+  import type { SortingEvent } from "./sorting-algorithms/sorting-algorithms";
   import type { SortingAlgorithmOption } from "./sorting-algorithms/sorting-algorithms";
+  import { Observable, of } from "rxjs";
   import NumbersCollector from "./input/numbers-collector/NumbersCollector.svelte";
   import { nextInts, nextInt } from "./randomizer/Randomizer";
   import Worms from "./worms/Worms.svelte";
+  import { onDestroy } from "svelte";
+  import { concatMap, delay, map, tap } from "rxjs/operators";
 
   const MIN_VALUE = 0;
   const MAX_VALUE = 300;
@@ -17,12 +21,23 @@
 
   const algorithms = availableAlgorithms;
   let values = nextInts(MIN_VALUE, MAX_VALUE, INITIAL_LENGTH);
+  let events: Observable<SortingEvent>;
+  let unsub;
 
   function sortWithAlgorithm(algorithm: SortingAlgorithmOption) {
-    const sortedValues = algorithm.sort(values);
-    console.log(sortedValues.result);
-    values = sortedValues.result;
-    //apply events to inputs in NumbersCollector and to worms
+    const sortingResult = algorithm.sort(values);
+    events = sortingResult.eventsStream.pipe(
+      concatMap((e) => of(e).pipe(delay(250)))
+    );
+    unsub = events.subscribe((e) => {
+      console.log("event in App: ", e);
+      if (e.type === "swapped") {
+        const [first, second] = e.indices;
+        const temp = values[first];
+        values[first] = values[second];
+        values[second] = temp;
+      }
+    });
   }
 
   function randomizeAll() {
@@ -42,14 +57,19 @@
       values = values.slice(0, newAmount);
     }
   }
+
+  onDestroy(() => {
+    unsub();
+  });
 </script>
 
 <Sky>
   <Ground>
-    <Worms slot="above-ground" wormHeights={values} />
+    <Worms slot="above-ground" wormHeights={values} {events} />
     <NumbersCollector
       slot="grass"
       {values}
+      {events}
       on:value-added={() => addValue()}
       on:value-removed={() => removeValue()}
       on:values-randomized={() => randomizeAll()}

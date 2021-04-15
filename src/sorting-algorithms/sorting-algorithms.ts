@@ -12,11 +12,9 @@ interface SortingAlgorithmOption {
 }
 
 interface SortingEvent {
+  type: "inspected" | "swapped";
   indices: number[];
 }
-
-interface ValuesInspectedEvent extends SortingEvent {}
-interface ValuesSwappedEvent extends SortingEvent {}
 
 interface SortingAlgorithm {
   sort: (nums: number[]) => SortingAlgorithmResult;
@@ -35,6 +33,4 @@ export {
   SortingAlgorithmOption,
   availableAlgorithms,
   SortingEvent,
-  ValuesInspectedEvent,
-  ValuesSwappedEvent,
 };

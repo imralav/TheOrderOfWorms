@@ -1,22 +1,47 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
+  import type { Observable } from "rxjs";
+  import { finalize } from "rxjs/operators";
+  import { createEventDispatcher, afterUpdate, onDestroy } from "svelte";
   import { scale } from "svelte/transition";
+  import type { SortingEvent } from "../../sorting-algorithms/sorting-algorithms";
   export let values: number[];
+  export let events: Observable<SortingEvent>;
+  let unsub;
+  let inspectedIndices = [];
 
   let numbersCollectorEvents = createEventDispatcher();
-  //the buttons shouldnt move after adding/removing worms
+
+  afterUpdate(() => {
+    if (events && unsub == undefined) {
+      unsub = events
+        .pipe(finalize(() => (inspectedIndices = [])))
+        .subscribe((e) => {
+          console.log("event in Collector: ", e);
+          if (e.type === "inspected") {
+            inspectedIndices = [];
+            inspectedIndices = e.indices;
+          }
+        });
+    }
+  });
+
+  onDestroy(() => {
+    unsub();
+  });
 </script>
 
 <main>
-  {#each values as value}
+  {#each values as value, index}
     <input
       bind:value
       readonly
       disabled
+      class={inspectedIndices.indexOf(index) >= 0 ? "inspected" : ""}
       size="4"
       transition:scale={{ duration: 250 }}
     />
   {/each}
+  <!-- //the buttons shouldnt move after adding/removing worms -->
   <button on:click={() => numbersCollectorEvents("value-added")}>+</button>
   <button on:click={() => numbersCollectorEvents("value-removed")}>-</button>
   <button on:click={() => numbersCollectorEvents("values-randomized")}>
@@ -58,5 +83,9 @@
     padding: 5px;
     border: 0;
     border-radius: 5px;
+  }
+
+  input.inspected {
+    border: 1px solid var(--grass-lighter-color);
   }
 </style>

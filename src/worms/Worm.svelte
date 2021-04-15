@@ -4,6 +4,7 @@
   import { tweened } from "svelte/motion";
   import WormFace from "./WormFace.svelte";
   export let height: number = 0;
+  export let inspected = false;
   const tweenedHeight = tweened(undefined, {
     duration: 1000,
     easing: elasticOut,
@@ -21,7 +22,7 @@
     easing: elasticInOut,
   }}
 >
-  <WormFace {hover} />
+  <WormFace hover={hover || inspected} />
 </main>
 
 <style>

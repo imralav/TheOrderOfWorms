@@ -4,6 +4,7 @@
   import { createEventDispatcher, afterUpdate, onDestroy } from "svelte";
   import { scale } from "svelte/transition";
   import type { SortingEvent } from "../../sorting-algorithms/sorting-algorithms";
+  import { refresh } from "../../icons/icons";
   export let values: number[];
   export let events: Observable<SortingEvent>;
   export let disabled = false;
@@ -42,7 +43,7 @@
       on:click={() => numbersCollectorEvents("values-randomized")}
       {disabled}
     >
-      <img src="/icons/refresh.svg" alt="Randomize values" />
+      {@html refresh}
     </button>
   </section>
   <section class="worm-heights">
@@ -86,6 +87,10 @@
     flex-shrink: 0;
   }
 
+  .buttons > *:focus {
+    outline: var(--grass-lighter-color) solid 1px;
+  }
+
   button {
     display: inline-block;
     text-align: center;
@@ -108,6 +113,7 @@
     padding: 5px;
     border: 0;
     border-radius: 5px;
+    box-sizing: border-box;
   }
 
   input.inspected {

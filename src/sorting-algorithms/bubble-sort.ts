@@ -1,5 +1,5 @@
-import { ReplaySubject } from "rxjs";
-import type { SortingAlgorithm, SortingEvent } from "./sorting-algorithms";
+import { SortingAlgorithm, swap } from "./sorting-algorithms";
+import { withSortingEvents } from "./sorting-algorithms";
 
 class BubbleSort implements SortingAlgorithm {
   private data: number[];
@@ -8,19 +8,17 @@ class BubbleSort implements SortingAlgorithm {
   }
 
   sort() {
-    const eventsStream = new ReplaySubject<SortingEvent>();
-    for (let i = 0; i < this.data.length - 1; i++) {
-      for (let j = 0; j < this.data.length - i - 1; j++) {
-        eventsStream.next({ indices: [j, j + 1], type: "inspected" });
-        if (this.data[j] > this.data[j + 1]) {
-          eventsStream.next({ indices: [j, j + 1], type: "swapped" });
-          const temp = this.data[j];
-          this.data[j] = this.data[j + 1];
-          this.data[j + 1] = temp;
+    const eventsStream = withSortingEvents((inspected, swapped) => {
+      for (let i = 0; i < this.data.length - 1; i++) {
+        for (let j = 0; j < this.data.length - i - 1; j++) {
+          inspected([j, j + 1]);
+          if (this.data[j] > this.data[j + 1]) {
+            swap(this.data, j, j + 1);
+            swapped([j, j + 1]);
+          }
         }
       }
-    }
-    eventsStream.complete();
+    });
     return {
       result: this.data,
       eventsStream,

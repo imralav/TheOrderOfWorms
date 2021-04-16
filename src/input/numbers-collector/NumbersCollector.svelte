@@ -6,6 +6,7 @@
   import type { SortingEvent } from "../../sorting-algorithms/sorting-algorithms";
   export let values: number[];
   export let events: Observable<SortingEvent>;
+  export let disabled = false;
   let unsub;
   let inspectedIndices = [];
 
@@ -16,7 +17,6 @@
       unsub = events
         .pipe(finalize(() => (inspectedIndices = [])))
         .subscribe((e) => {
-          console.log("event in Collector: ", e);
           if (e.type === "inspected") {
             inspectedIndices = [];
             inspectedIndices = e.indices;
@@ -31,34 +31,59 @@
 </script>
 
 <main>
-  {#each values as value, index}
-    <input
-      bind:value
-      readonly
-      disabled
-      class={inspectedIndices.indexOf(index) >= 0 ? "inspected" : ""}
-      size="4"
-      transition:scale={{ duration: 250 }}
-    />
-  {/each}
-  <!-- //the buttons shouldnt move after adding/removing worms -->
-  <button on:click={() => numbersCollectorEvents("value-added")}>+</button>
-  <button on:click={() => numbersCollectorEvents("value-removed")}>-</button>
-  <button on:click={() => numbersCollectorEvents("values-randomized")}>
-    <img src="/icons/refresh.svg" alt="Randomize values" />
-  </button>
+  <section class="buttons">
+    <button on:click={() => numbersCollectorEvents("value-added")} {disabled}
+      >+</button
+    >
+    <button on:click={() => numbersCollectorEvents("value-removed")} {disabled}
+      >-</button
+    >
+    <button
+      on:click={() => numbersCollectorEvents("values-randomized")}
+      {disabled}
+    >
+      <img src="/icons/refresh.svg" alt="Randomize values" />
+    </button>
+  </section>
+  <section class="worm-heights">
+    {#each values as value, index}
+      <input
+        bind:value
+        readonly
+        disabled
+        class={inspectedIndices.indexOf(index) >= 0 ? "inspected" : ""}
+        size="4"
+        transition:scale={{ duration: 250 }}
+      />
+    {/each}
+  </section>
 </main>
 
 <style>
   main {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+  }
+
+  .worm-heights {
+    width: 100%;
+    flex-grow: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 25px;
   }
 
-  main > *:focus {
+  .worm-heights > *:focus {
     outline: var(--grass-lighter-color) solid 1px;
+  }
+
+  .buttons {
+    flex-grow: 0;
+    flex-shrink: 0;
   }
 
   button {

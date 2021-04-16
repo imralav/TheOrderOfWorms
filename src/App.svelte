@@ -6,12 +6,12 @@
   import { availableAlgorithms } from "./sorting-algorithms/sorting-algorithms";
   import type { SortingEvent } from "./sorting-algorithms/sorting-algorithms";
   import type { SortingAlgorithmOption } from "./sorting-algorithms/sorting-algorithms";
-  import { Observable, of } from "rxjs";
+  import { Observable, of, Subscription } from "rxjs";
   import NumbersCollector from "./input/numbers-collector/NumbersCollector.svelte";
   import { nextInts, nextInt } from "./randomizer/Randomizer";
   import Worms from "./worms/Worms.svelte";
   import { onDestroy } from "svelte";
-  import { concatMap, delay, map, tap } from "rxjs/operators";
+  import { concatMap, delay, finalize, map, tap } from "rxjs/operators";
 
   const MIN_VALUE = 0;
   const MAX_VALUE = 300;
@@ -22,22 +22,31 @@
   const algorithms = availableAlgorithms;
   let values = nextInts(MIN_VALUE, MAX_VALUE, INITIAL_LENGTH);
   let events: Observable<SortingEvent>;
-  let unsub;
+  let unsub: Subscription;
+  let processingSortEvents = false;
 
   function sortWithAlgorithm(algorithm: SortingAlgorithmOption) {
     const sortingResult = algorithm.sort(values);
     events = sortingResult.eventsStream.pipe(
       concatMap((e) => of(e).pipe(delay(250)))
     );
-    unsub = events.subscribe((e) => {
-      console.log("event in App: ", e);
-      if (e.type === "swapped") {
-        const [first, second] = e.indices;
-        const temp = values[first];
-        values[first] = values[second];
-        values[second] = temp;
-      }
-    });
+    processingSortEvents = true;
+    unsub = events
+      .pipe(
+        finalize(() => {
+          unsub.unsubscribe();
+          events = undefined;
+          processingSortEvents = false;
+        })
+      )
+      .subscribe((e) => {
+        if (e.type === "swapped") {
+          const [first, second] = e.indices;
+          const temp = values[first];
+          values[first] = values[second];
+          values[second] = temp;
+        }
+      });
   }
 
   function randomizeAll() {
@@ -59,7 +68,7 @@
   }
 
   onDestroy(() => {
-    unsub();
+    unsub.unsubscribe();
   });
 </script>
 
@@ -70,6 +79,7 @@
       slot="grass"
       {values}
       {events}
+      disabled={processingSortEvents}
       on:value-added={() => addValue()}
       on:value-removed={() => removeValue()}
       on:values-randomized={() => randomizeAll()}
@@ -77,7 +87,8 @@
     <AlgorithmSelector
       slot="earth"
       {algorithms}
-      on:sorting={(event) => sortWithAlgorithm(event.detail)}
+      disabled={processingSortEvents}
+      on:sorting={({ detail }) => sortWithAlgorithm(detail)}
     />
   </Ground>
 </Sky>

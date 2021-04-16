@@ -4,6 +4,8 @@
   import { nextNumber, nextInt } from "../randomizer/Randomizer";
 
   const CLOUDS_AMOUNT = 30;
+  const CLOUD_MAX_SIZE = 150;
+  const CLOUD_MAX_SPEED = 120;
 
   let skyWidth: number;
   let skyHeight: number;
@@ -17,12 +19,12 @@
     opacity: number;
   }
 
-  function generateCloud(y?: number): Cloud {
+  function generateCloud(): Cloud {
     return {
-      y: y || nextInt(0, skyWidth),
-      x: nextInt(0, skyHeight),
-      size: nextInt(20, 150),
-      speed: nextInt(80, 120),
+      y: nextInt(0, skyWidth),
+      x: nextNumber(0, 1),
+      size: nextInt(20, CLOUD_MAX_SIZE),
+      speed: nextInt(80, CLOUD_MAX_SPEED),
       opacity: Math.sqrt(nextNumber(0.25, 1)),
     };
   }
@@ -41,7 +43,7 @@
 <main bind:clientWidth={skyWidth} bind:clientHeight={skyHeight}>
   <section class="clouds">
     {#each clouds as cloud}
-      <Cloud {...cloud} {skyWidth} />
+      <Cloud {...cloud} {skyWidth} {skyHeight} />
     {/each}
   </section>
   <slot />
@@ -51,10 +53,17 @@
   :global(body) {
     background-color: rgb(87, 191, 240);
     overflow: hidden;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vw;
   }
   section.clouds {
+    overflow: hidden;
     width: 100vw;
+    max-width: 100vw;
     height: 100vh;
+    max-height: 100vw;
     display: inline;
     position: relative;
   }

@@ -8,14 +8,15 @@
     size: number,
     speed: number = 100,
     skyWidth: number,
+    skyHeight: number,
     opacity: number = 1;
   export const CLOUD_MOVEMENT_TICK_INTERVAL = 4000;
+  $: height = size / 2;
+  $: top = (skyHeight - height) * x;
   let animatedY;
   let unsubscribeAnimation;
 
   function startAnimation() {
-    //start animation of clouds by moving them in one direction
-
     animatedY = tweened(y, {
       duration: CLOUD_MOVEMENT_TICK_INTERVAL,
     });
@@ -50,8 +51,7 @@
 </script>
 
 <div
-  style="top: {x}px; left: {$animatedY}px; width: {size}px; height: {size /
-    2}px; opacity: {opacity}"
+  style="top: {top}px; left: {$animatedY}px; width: {size}px; height: {height}px; opacity: {opacity};"
 />
 
 <style>

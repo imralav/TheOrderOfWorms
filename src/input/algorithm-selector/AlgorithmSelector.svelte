@@ -4,17 +4,18 @@
 
   const dispatcher = createEventDispatcher();
   export let algorithms: SortingAlgorithmOption[];
+  export let disabled = false;
   let selectedAlgorithm: SortingAlgorithmOption;
 </script>
 
 <main>
   <p>Select sorting method:</p>
-  <select bind:value={selectedAlgorithm}>
+  <select bind:value={selectedAlgorithm} {disabled}>
     {#each algorithms as algorithm}
       <option value={algorithm}>{algorithm.name}</option>
     {/each}
   </select>
-  <button on:click={() => dispatcher("sorting", selectedAlgorithm)}>
+  <button on:click={() => dispatcher("sorting", selectedAlgorithm)} {disabled}>
     Sort worms with {selectedAlgorithm?.name}
   </button>
 </main>

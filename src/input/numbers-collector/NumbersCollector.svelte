@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Observable } from "rxjs";
+  import type { Observable, Subscription } from "rxjs";
   import { finalize } from "rxjs/operators";
   import { createEventDispatcher, afterUpdate, onDestroy } from "svelte";
   import { scale } from "svelte/transition";
@@ -8,7 +8,7 @@
   export let values: number[];
   export let events: Observable<SortingEvent>;
   export let disabled = false;
-  let unsub;
+  let unsub: Subscription;
   let inspectedIndices = [];
 
   let numbersCollectorEvents = createEventDispatcher();
@@ -16,10 +16,15 @@
   afterUpdate(() => {
     if (events && unsub == undefined) {
       unsub = events
-        .pipe(finalize(() => (inspectedIndices = [])))
+        .pipe(
+          finalize(() => {
+            inspectedIndices = [];
+            unsub.unsubscribe();
+            unsub = undefined;
+          })
+        )
         .subscribe((e) => {
           if (e.type === "inspected") {
-            inspectedIndices = [];
             inspectedIndices = e.indices;
           }
         });
@@ -27,7 +32,7 @@
   });
 
   onDestroy(() => {
-    unsub();
+    unsub?.unsubscribe();
   });
 </script>
 
@@ -52,7 +57,7 @@
         bind:value
         readonly
         disabled
-        class={inspectedIndices.indexOf(index) >= 0 ? "inspected" : ""}
+        class={inspectedIndices.includes(index) ? "inspected" : ""}
         size="4"
         transition:scale={{ duration: 250 }}
       />

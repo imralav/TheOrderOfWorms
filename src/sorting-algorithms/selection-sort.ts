@@ -17,11 +17,11 @@ class SelectionSort implements SortingAlgorithm {
                 let minIndex = i
                 let min = this.data[minIndex]
                 for(let j = i; j<this.data.length; j++) {
-                    inspected([min])
-                    if(min > this.data[j]) {
-                        min = this.data[j]
-                        minIndex = j
-                    }
+                  inspected([minIndex, j])
+                  if(min > this.data[j]) {
+                      min = this.data[j]
+                      minIndex = j
+                  }
                 }
                 swap(this.data, i, minIndex)
                 swapped([i, minIndex])
